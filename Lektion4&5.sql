@@ -90,24 +90,96 @@ USE kurs;
 --                         WHERE
 --                             l.lnamn = 'Sofia Wilsson' or l.lnamn='Carl Nordin')));
 #S10
-SELECT 
-    e.enamn, e.etel
-FROM
-    elev e
-WHERE
-    e.eid IN (SELECT 
-            dt.elev
-        FROM
-            deltag dt
-        WHERE
-            dt.kurs in (SELECT 
-                    kf.kurs
-                FROM
-                    ktillf kf
-                WHERE
-                    kf.larare in (SELECT 
-                            l.lid
-                        FROM
-                            larare l
-                        WHERE
-                            l.lnamn = 'Sofia Wilsson' or l.lnamn='Carl Nordin')));
+-- SELECT 
+--     e.enamn, e.etel
+-- FROM
+--     elev e
+-- WHERE
+--     e.eid IN (SELECT 
+--             dt.elev
+--         FROM
+--             deltag dt,
+--             deltag dt2
+--         WHERE
+--             dt.kurs IN (SELECT 
+--                     kf.kurs
+--                 FROM
+--                     ktillf kf
+--                 WHERE
+--                     kf.larare IN (SELECT 
+--                             l.lid
+--                         FROM
+--                             larare l
+--                         WHERE
+--                             l.lnamn = 'Sofia Wilsson'))
+-- 			AND dt2.kurs IN (SELECT 
+-- 				kf.kurs
+-- 			FROM
+-- 				ktillf kf
+-- 			WHERE
+-- 				kf.larare IN (SELECT 
+-- 						l.lid
+-- 					FROM
+-- 						larare l
+-- 					WHERE
+-- 						l.lnamn = 'Carl Nordin'))
+--                 AND dt.elev = dt2.elev);
+--                 
+--                 SELECT 
+-- 				kf.kurs, kf.lokal, kf.larare, kf.sdat
+-- 			FROM
+-- 				ktillf kf
+-- 			WHERE
+-- 				kf.larare IN (SELECT 
+-- 						l.lid
+-- 					FROM
+-- 						larare l
+-- 					WHERE
+-- 						l.lnamn = 'Carl Nordin')
+#S11
+-- SELECT 
+--     l.lnamn
+-- FROM
+--     larare l
+-- WHERE NOT EXISTS (SELECT 
+--             *
+--         FROM
+--             lokal lok
+--         WHERE
+--             lok.maxant >= 20
+--                 AND lok.namn NOT IN (SELECT 
+--                     kf.lokal
+--                 FROM
+--                     ktillf kf
+--                 WHERE
+--                     kf.larare = l.lid));
+#S12
+-- SELECT 
+--     l.lnamn
+-- FROM
+--     larare l
+-- WHERE
+--     l.lid IN (SELECT 
+--             kf.larare
+--         FROM
+--             ktillf kf
+--         WHERE
+--             kf.lokal = 'Orion')
+--         AND NOT l.lid IN (SELECT 
+--             kf.larare
+--         FROM
+--             ktillf kf
+--         WHERE
+--             kf.lokal = 'Tellus');
+
+#S13
+-- select count(*)
+-- from lokal
+#S14
+select e.enamn, c
+from elev e 
+where e.eid = (
+select count(d.elev) as c
+	from deltag d
+    where d.elev =e.eid 
+    )
