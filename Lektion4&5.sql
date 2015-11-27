@@ -176,10 +176,49 @@ USE kurs;
 -- select count(*)
 -- from lokal
 #S14
-select e.enamn, c
-from elev e 
-where e.eid = (
-select count(d.elev) as c
-	from deltag d
-    where d.elev =e.eid 
-    )
+-- SELECT 
+--     enamn, count(*) as kurstillfällen
+-- FROM
+--     elev,
+--     deltag
+-- WHERE
+--     elev.eid = deltag.elev
+-- GROUP BY enamn
+#S15
+-- SELECT 
+--     enamn, COUNT(*) AS kurser
+-- FROM
+--     (SELECT 
+--         enamn, COUNT(*) AS kurser
+--     FROM
+--         elev, deltag
+--     WHERE
+--         eid = deltag.elev
+--     GROUP BY enamn , kurs) as x
+-- GROUP BY enamn
+#S16
+-- select lnamn, count(*)
+-- from ktillf, larare
+-- where larare=lid
+-- group by lnamn
+#S17
+-- SELECT 
+--     namn, MAX(anv)
+-- FROM
+--     (SELECT 
+--         namn, COUNT(*) AS anv
+--     FROM
+--         ktillf, lokal
+--     WHERE
+--         lokal = namn
+--     GROUP BY namn) AS x;
+-- SELECT 
+--     namn, COUNT(*) AS anv
+-- FROM
+--     ktillf,
+--     lokal
+-- WHERE
+--     lokal = namn
+-- GROUP BY namn
+-- ORDER BY anv DESC
+-- LIMIT 1;
