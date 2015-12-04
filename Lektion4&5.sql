@@ -222,3 +222,88 @@ USE kurs;
 -- GROUP BY namn
 -- ORDER BY anv DESC
 -- LIMIT 1;
+#S18
+-- SELECT 
+--     kursben, COUNT(distinct larare) AS ggr
+-- FROM ktillf,
+--     kurs
+-- WHERE
+--     kurskod = kurs
+-- GROUP BY kurs , kursben
+-- HAVING ggr > 1;
+-- 
+-- SELECT 
+--     (SELECT 
+--             kursben
+--         FROM
+--             kurs k
+--         WHERE
+--             k.kurskod = kurs) AS benaemning,
+--     COUNT(distinct larare) AS ggr
+-- FROM ktillf
+-- GROUP BY kurs
+-- HAVING ggr > 1;
+
+#S19
+#Java, grundkurs
+-- SELECT 
+--     COUNT(DISTINCT lokal) as lokaler
+-- FROM
+--     ktillf
+-- WHERE
+--     kurs = (SELECT 
+--             kurskod
+--         FROM
+--             kurs
+--         WHERE
+--             kursben = 'Java, grundkurs');
+#S20
+-- SELECT 
+--     elev.enamn
+-- FROM
+--     elev,
+--     deltag,
+--     ktillf
+-- WHERE
+--     elev.eid = deltag.elev
+--         AND deltag.kurs = ktillf.kurs
+--         AND deltag.sdat = ktillf.sdat
+--         AND ktillf.larare IN (SELECT DISTINCT
+--             larare
+--         FROM
+--             elev,
+--             deltag,
+--             ktillf
+--         WHERE
+--             elev.enamn = 'Ebba Ryd'
+--                 AND elev.eid = deltag.elev
+--                 AND deltag.kurs = ktillf.kurs
+--                 AND deltag.sdat = ktillf.sdat)
+-- GROUP BY elev.enamn
+-- HAVING COUNT(*) = (SELECT 
+--         COUNT(DISTINCT larare)
+--     FROM
+--         elev,
+--         deltag,
+--         ktillf
+--     WHERE
+--         elev.enamn = 'Ebba Ryd'
+--             AND elev.eid = deltag.elev
+--             AND deltag.kurs = ktillf.kurs
+--             AND deltag.sdat = ktillf.sdat);
+
+#S21
+SELECT 
+    e.enamn,
+    SUM(kurs.pris * 0.5) AS price
+FROM
+    elev e,
+    deltag,
+    ktillf,
+    kurs
+WHERE
+    e.eid = deltag.elev
+        AND deltag.kurs = ktillf.kurs
+        AND deltag.sdat = ktillf.sdat
+        AND ktillf.kurs = kurs.kurskod
+GROUP BY e.enamn
